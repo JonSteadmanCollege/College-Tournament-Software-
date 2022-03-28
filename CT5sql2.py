@@ -1,13 +1,15 @@
 from tkinter import *
 from tkinter import ttk
-from tkinter.ttk import * 
+from tkinter.ttk import *
+import tkinter.messagebox
+
 
 import sqlite3
 
 
 root = Tk()
 root.title('College Tournament Software by Jonathan Steadman!')
-root.geometry('700x580')
+root.geometry('850x580')
 root.configure(bg='pink')
 
 root.resizable(0,0)
@@ -137,9 +139,21 @@ p_box.grid(row=1,column=4)
 
 #Add Record
 def add_record():
-    global count
     my_tree.insert(parent='',index='end', iid=count, text="",values=(id_box.get(),fn_box.get(),ln_box.get(),t_box.get(),p_box.get()))
-    count=count+1
+
+    conn = sqlite3.connect('CollTour.db')
+    c=conn.cursor()
+    #INSERT
+    idx=id_box.get()
+    fn=fn_box.get()
+    ln=ln_box.get()
+    t=t_box.get()
+    p=p_box.get()
+
+    
+    c.execute('INSERT INTO tblTour (ID,Forename,Surname,Team,Points) VALUES(?,?,?,?,?)',(idx,fn,ln,t,p))
+    conn.commit()
+    conn.close()
     #Clear entry boxes
     id_box.delete(0, END)
     fn_box.delete(0, END)
@@ -147,20 +161,8 @@ def add_record():
     t_box.delete(0,END)
     p_box.delete(0,END)
 
+    print("Test 2111")
 #Connect to existing
-def Add_Record():
-    conn = sqlite3.connect('CollTour.db')
-    
-    c=conn.cursor()
-    #INSERT
-    c.execute('INSERT INTO tblTour (ID, Forename, Last Name, Team, Points) VALUES(?,?,?,?,?)',(id,fn,ln,t,p))
-    {
-            'id':id_box.get(),
-            'fn':fn_box.get(),
-            'ln':ln_box.get(),
-            't':t_box.get(),
-            'p':p_box.get()
-    }
 
 
 
@@ -245,9 +247,25 @@ def select_record():
 
 #Save updates record
 def update_record ():
+    idx=id_box.get()
+    fn=fn_box.get()
+    ln=ln_box.get()
+    t=t_box.get()
+    p=p_box.get()
     selected = my_tree.focus()
     #save new data
     my_tree.item(selected, text="",values=(id_box.get(),fn_box.get(),ln_box.get(),t_box.get(),p_box.get()))
+
+    #connect to the database :)
+    conn = sqlite3.connect('CollTour.db')
+    c=conn.cursor()
+    c.execute('UPDATE tblTour SET Forename = ?, Surname = ?, Team = ?,Points=? WHERE ID=?',(fn,ln,t,p,idx))
+    print("fwfsfwefwe")
+    conn.commit()
+    conn.close()
+
+
+
     #Clear entry boxes
     id_box.delete(0, END)
     fn_box.delete(0, END)
@@ -267,7 +285,6 @@ select_record.pack(padx=10,pady=5, side=LEFT)
 
 update_record = Button(root,text="Update Record",style="W.TButton",command=update_record)
 update_record.pack(padx=10,pady=5, side=LEFT)
-
 #run to pull in data
 query_database()
 
