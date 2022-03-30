@@ -2,14 +2,16 @@ from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import *
 import tkinter.messagebox
-
-
 import sqlite3
-
-
+#Please install the Ubuntu font
+#This is open source but is on Github for anyone who wants to use the source code for their
+#Own work.
+#Jonathan Steadman.
+#Tested mostly on Windows and Linux Mint. :)
+#This code might have a few bugs. 
 root = Tk()
 root.title('College Tournament Software by Jonathan Steadman!')
-root.geometry('850x580')
+root.geometry('1080x790')
 root.configure(bg='pink')
 
 root.resizable(0,0)
@@ -44,11 +46,16 @@ def query_database():
 label = ttk.Label(
     root,
     text='College Tournament Software!',
-    font=("Ubuntu", 24))
+    font=("Ubuntu", 24,"bold"))
+label.pack(ipadx=10, ipady=10)
+label = ttk.Label(
+    root,
+    text='The Database:',
+    font=("Ubuntu", 20))
 label.pack(ipadx=10, ipady=10)
 #Create Treeview Frame
 tree_frame = Frame(root)
-tree_frame.pack(pady=20)
+tree_frame.pack(pady=30)
 
 #Treeview Scrollbar
 tree_scroll = Scrollbar(tree_frame)
@@ -61,7 +68,11 @@ my_tree.pack()
 
 #Configure the scrollbar
 tree_scroll.config(command=my_tree.yview)
-
+label = ttk.Label(
+    root,
+    text='Enter some data:',
+    font=("Ubuntu", 20))
+label.pack(ipadx=10, ipady=10)
 #Define the number of columns in Treeview
 my_tree['columns']=("ID","Forename","Surname","Team","Points")
 
@@ -139,7 +150,7 @@ p_box.grid(row=1,column=4)
 
 #Add Record
 def add_record():
-    my_tree.insert(parent='',index='end', iid=count, text="",values=(id_box.get(),fn_box.get(),ln_box.get(),t_box.get(),p_box.get()))
+    my_tree.insert(parent='',index='end', text="",values=(id_box.get(),fn_box.get(),ln_box.get(),t_box.get(),p_box.get()))
 
     conn = sqlite3.connect('CollTour.db')
     c=conn.cursor()
@@ -162,12 +173,6 @@ def add_record():
     p_box.delete(0,END)
 
     print("Test 2111")
-#Connect to existing
-
-
-
-
-# Submit Customer To Database
 def update_record():
     print("Hello")
     print(fn_box.get())
@@ -185,13 +190,7 @@ def update_record():
    
     c=conn.cursor()
     
-    c:execute("""UPDATE tblTour SET
-        First_Name = :first,
-        Last_Name = :last,
-        Team = :team,
-        Points = :point
-
-        WHERE ID = :oid""",
+    c:execute("""UPDATE tblTour SET First_Name = :first, Last_Name = :last, Team = :team,Points = :point WHERE ID = :oid""",
         {
             'first': fn_box.get(),
             'last': ln_box.get(),
@@ -202,26 +201,12 @@ def update_record():
 
         
         })
-
-
-
-
-        
 	# Commit the changes to the database
     conn.commit()
     #c.execute("SELECT * FROM tblTour")
     print(c.fetchall())
     conn.close()
     #query_database()
-
-
-
-
-
-
-
-
-
 
 #Select record
 def select_record():
@@ -273,11 +258,66 @@ def update_record ():
     t_box.delete(0,END)
     p_box.delete(0,END)
 
+def results_database():
+    wx = Tk()
+    wx.title("College Tournament Software by Jonathan Steadman: Results!")
+    wx.geometry('700x480')
+    wx.configure(bg='pink')
+    wx.resizable(0,0)
+
+    labelone =Label(wx,text="Results:",font=("Ubuntu", 24,"bold"))
+    labelone.pack()
+    #Create a new treeview frame. :)
+    resultstree_frame = Frame(wx)
+    resultstree_frame.pack(pady=40)
+    conn = sqlite3.connect('CollTour.db')
+        #Treeview Scrollbar
+    myresults_scroll = Scrollbar(resultstree_frame)
+    myresults_scroll.pack(side=RIGHT,fill=Y)
+    #Create Treeview
+    myresults_tree = ttk.Treeview(resultstree_frame,yscrollcommand=myresults_scroll.set)
+    myresults_tree.pack()
+
+    #Define the number of columns in treeview
+    myresults_tree['columns']=("ID","Forename","Surname","Team","Points")
+#format headings.
+    myresults_tree.column("#0",width=5)
+    myresults_tree.column("ID",anchor=CENTER, width=100)
+    myresults_tree.column("Forename",anchor=W,width=140)
+    myresults_tree.column("Surname",anchor=W,width=100)
+    myresults_tree.column("Team",anchor=W,width=100)
+    myresults_tree.column("Points",anchor=W,width = 100)
+#Create headings
+    myresults_tree.heading("#0",text="",anchor=W)
+    myresults_tree.heading("ID",text="ID",anchor=CENTER)
+    myresults_tree.heading("Forename",text="Forename",anchor=W)
+    myresults_tree.heading("Surname",text="Surname",anchor=W)
+    myresults_tree.heading("Team",text="Team",anchor=W)
+    myresults_tree.heading("Points",text="Points",anchor=W)
+    #connect a cusor
+    c=conn.cursor()
+    c.execute("SELECT tblTour.ID, tblTour.Forename, tblTour.Surname, tblTour.Points FROM tblTour GROUP BY tblTour.ID, tblTour.Forename, tblTour.Surname, tblTour.Points, tblTour.Team;")
+    records = c.fetchall()
+    global count
+    count=0
+    for record in records:
+        myresults_tree.insert(parent='',index='end', iid=count, text="", values=(record[0],record[1],record[2],record[3]))
+        count=count+1
+    conn.commit()
+    conn.close
+    label = ttk.Label(wx,text='Here is all your data that you got from the database:', font=("Ubuntu", 20,"bold"))
+    label.pack(ipadx=10, ipady=10)
+    
 #Customize the buttons to make it look
 st = Style()
-st.configure('W.TButton', background='#FFC0CB', foreground='black', font=('Ubuntu', 22 ))
+st.configure('W.TButton', background='grey', foreground='black', font=('Ubuntu', 22,"bold" ))
 #Buttons
-add_record = Button(root,text="Add new Record",style="W.TButton",command=add_record) #Ran into this issue but seems to be working now. :)
+label = ttk.Label(
+    root,
+    text='Click on those buttons to do an action with the new data or the data you selected:',
+    font=("Ubuntu", 20,"bold"))
+label.pack(ipadx=10, ipady=10)
+add_record = Button(root,text="Add new Record",style="W.TButton",command=add_record)
 add_record.pack(padx=10,pady=5, side=LEFT)
 
 select_record = Button(root,text="Select Record",style="W.TButton",command=select_record)
@@ -285,7 +325,8 @@ select_record.pack(padx=10,pady=5, side=LEFT)
 
 update_record = Button(root,text="Update Record",style="W.TButton",command=update_record)
 update_record.pack(padx=10,pady=5, side=LEFT)
-#run to pull in data
+results_database = Button(root,text="Results", style="W.TButton",command=results_database)
+results_database.pack(padx=10, pady=5, side=LEFT)
 query_database()
 
     
