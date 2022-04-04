@@ -280,10 +280,10 @@ def results_database():
 
     #Define the number of columns in treeview
     myresults_tree['columns']=("ID","Forename","Surname","Team","Points")
-#format headings.
+    #format headings.
     myresults_tree.column("#0",width=5)
     myresults_tree.column("ID",anchor=CENTER, width=100)
-    myresults_tree.column("Forename",anchor=W,width=140)
+    myresults_tree.column("Forename",anchor=W,width=100)
     myresults_tree.column("Surname",anchor=W,width=100)
     myresults_tree.column("Team",anchor=W,width=100)
     myresults_tree.column("Points",anchor=W,width = 100)
@@ -296,12 +296,12 @@ def results_database():
     myresults_tree.heading("Points",text="Points",anchor=W)
     #connect a cusor
     c=conn.cursor()
-    c.execute("SELECT tblTour.ID, tblTour.Forename, tblTour.Surname, tblTour.Points FROM tblTour GROUP BY tblTour.ID, tblTour.Forename, tblTour.Surname, tblTour.Points, tblTour.Team;")
+    c.execute("SELECT * FROM tblTour")
     records = c.fetchall()
     global count
     count=0
     for record in records:
-        myresults_tree.insert(parent='',index='end', iid=count, text="", values=(record[0],record[1],record[2],record[3]))
+        myresults_tree.insert(parent='',index='end', iid=count, text="", values=(record[0],record[1],record[2],record[3],record[4]))
         count=count+1
     conn.commit()
     conn.close
@@ -310,7 +310,7 @@ def results_database():
     
 #Customize the buttons to make it look
 st = Style()
-st.configure('W.TButton', background='grey', foreground='black', font=('Ubuntu', 22,"bold" ))
+st.configure('W.TButton', background='purple', foreground='black', font=('Ubuntu', 22,"bold" ))
 #Buttons
 label = ttk.Label(
     root,
