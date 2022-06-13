@@ -1,3 +1,5 @@
+#Open source and Free to use this code as much as you want.
+# No longer since 13/06/2022 getting updates. Sorry.
 from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import *
@@ -5,8 +7,6 @@ import tkinter.messagebox
 import sqlite3
 import tkinter as tk
 #Please install the Ubuntu font
-#This is open source but is on Github for anyone who wants to use the source code for their
-#Own work.
 #Jonathan Steadman.
 #Tested mostly on Windows and Linux Mint. :)
 #This code might have a few bugs. 
@@ -47,12 +47,18 @@ def query_database():
 label = ttk.Label(
     root,
     text='College Tournament Software!',
-    font=("Ubuntu", 24,"bold"))
+    font=(("Ubuntu", 24,"bold", "underline")),
+    background=("pink")
+    )
+
 label.pack(ipadx=10, ipady=10)
 label = ttk.Label(
     root,
     text='The Database:',
-    font=("Ubuntu", 20))
+    font=("Ubuntu", 20),
+    background=("pink")
+    )
+
 label.pack(ipadx=10, ipady=10)
 #Create Treeview Frame
 tree_frame = Frame(root)
@@ -72,7 +78,9 @@ tree_scroll.config(command=my_tree.yview)
 label = ttk.Label(
     root,
     text='Enter some data:',
-    font=("Ubuntu", 20))
+    font=("Ubuntu", 20),
+    background=("pink")
+)
 label.pack(ipadx=10, ipady=10)
 #Define the number of columns in Treeview
 Style().configure("Treeview.Heading", font=(17))
@@ -262,13 +270,15 @@ def update_record ():
 
 def results_database():
     wx = Tk()
-    wx.title("College Tournament Software by Jonathan Steadman: Results!")
+    wx.title("College Tournament Software by Jonathan Steadman - Results!")
     wx.geometry('700x480')
     wx.configure(bg='pink')
     wx.resizable(0,0)
 
-    labelone =Label(wx,text="Results:",font=("Ubuntu", 24,"bold"))
+    labelone =Label(wx,text="College Tournament Software - Results:",font=("Ubuntu", 24,"bold","underline"),background="pink")
     labelone.pack()
+    labeltwo = ttk.Label(wx,text='Here is all your data that you got from the database:', font=("Ubuntu", 20,"bold"),background="pink")
+    labeltwo.pack()
     #Create a new treeview frame. :)
     resultstree_frame = Frame(wx)
     resultstree_frame.pack(pady=40)
@@ -307,17 +317,20 @@ def results_database():
         count=count+1
     conn.commit()
     conn.close
-    label = ttk.Label(wx,text='Here is all your data that you got from the database:', font=("Ubuntu", 20,"bold"))
-    label.pack(ipadx=10, ipady=10)
+
     
 #Customize the buttons to make it look
+#Only really works in Linux and FreeBSD. This software is compiled to run on Linux and Windows. Windows cant have the buttons customized. So you can ignore it.
+#As you dont need to worry about it in BTECH. 
 st = Style()
 st.configure('W.TButton', background='purple', foreground='black', font=('Ubuntu', 22,"bold" ))
 #Buttons
 label = ttk.Label(
     root,
     text='Click on those buttons to do an action with the new data or the data you selected:',
-    font=("Ubuntu", 20,"bold"))
+    font=("Ubuntu", 20,"bold"),
+    background=("pink")
+)
 label.pack(ipadx=10, ipady=10)
 add_record = Button(root,text="Add new Record",style="W.TButton",command=add_record)
 add_record.pack(padx=10,pady=5, side=LEFT)
