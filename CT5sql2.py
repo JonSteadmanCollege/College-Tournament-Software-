@@ -199,7 +199,7 @@ def update_record():
    
     c=conn.cursor()
     
-    c:execute("""UPDATE tblTour SET First_Name = :first, Last_Name = :last, Team = :team,Points = :point WHERE ID = :oid""",
+    c.execute("""UPDATE tblTour SET First_Name = :first, Last_Name = :last, Team = :team,Points = :point WHERE ID = :oid""",
         {
             'first': fn_box.get(),
             'last': ln_box.get(),
