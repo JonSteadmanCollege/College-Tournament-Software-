@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter.ttk import *
 import tkinter.messagebox
 import sqlite3
+import tkinter as tk
 #Please install the Ubuntu font
 #This is open source but is on Github for anyone who wants to use the source code for their
 #Own work.
@@ -74,6 +75,7 @@ label = ttk.Label(
     font=("Ubuntu", 20))
 label.pack(ipadx=10, ipady=10)
 #Define the number of columns in Treeview
+Style().configure("Treeview.Heading", font=(17))
 my_tree['columns']=("ID","Forename","Surname","Team","Points")
 
 #Format columns
@@ -328,6 +330,22 @@ update_record.pack(padx=10,pady=5, side=LEFT)
 results_database = Button(root,text="Results", style="W.TButton",command=results_database)
 results_database.pack(padx=10, pady=5, side=LEFT)
 query_database()
+def on_closing():
+    root = tk.Toplevel()  
+    root.resizable(0,0)
+    root.title("Confirm to exit the Software:")
 
-    
+
+    labelTitle = ttk.Label(root,font=("Ubuntu", 26,"bold","underline"),anchor='center', text="Confirm to exit the software:")
+    label = ttk.Label(root,font=("Ubuntu", 16,"bold",),anchor='center', text="Are you sure you want to leave this software?")
+
+    labelTitle.pack(side="top",fill="x",pady=1)
+    label.pack(side="top", fill="x", pady=2)
+    B1 = tk.Button(root, text="Yes",font=("ubuntu",28),bg="pink",activebackground='#23d18b', command = root.quit)
+
+    B2 = tk.Button(root, text="No",font=("ubuntu",28),bg="pink",activebackground='#23d18b', command = root.destroy)
+    B1.pack(side=tkinter.LEFT, anchor=CENTER)
+    B2.pack(side=tkinter.RIGHT, anchor=CENTER)
+
+root.protocol("WM_DELETE_WINDOW", on_closing)
 root.mainloop()
