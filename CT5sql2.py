@@ -17,7 +17,7 @@ root.configure(bg='pink')
 
 root.resizable(0,0)
 
-# connect to existing
+# connect to existing Database. If no database it will create one automatically. :) 
 conn = sqlite3.connect('CollTour.db')
 
 #Create a cursor
@@ -182,7 +182,6 @@ def add_record():
     t_box.delete(0,END)
     p_box.delete(0,END)
 
-    print("Test 2111")
 def update_record():
     print("Hello")
     print(fn_box.get())
@@ -211,7 +210,7 @@ def update_record():
 
         
         })
-	# Commit the changes to the database
+#Commit the changes to the database
     conn.commit()
     #c.execute("SELECT * FROM tblTour")
     print(c.fetchall())
@@ -251,11 +250,10 @@ def update_record ():
     #save new data
     my_tree.item(selected, text="",values=(id_box.get(),fn_box.get(),ln_box.get(),t_box.get(),p_box.get()))
 
-    #connect to the database :)
+    #connect to the database :). The one it created or you got allready will be used. 
     conn = sqlite3.connect('CollTour.db')
     c=conn.cursor()
     c.execute('UPDATE tblTour SET Forename = ?, Surname = ?, Team = ?,Points=? WHERE ID=?',(fn,ln,t,p,idx))
-    print("fwfsfwefwe")
     conn.commit()
     conn.close()
 
@@ -320,8 +318,7 @@ def results_database():
 
     
 #Customize the buttons to make it look
-#Only really works in Linux and FreeBSD. This software is compiled to run on Linux and Windows. Windows cant have the buttons customized. So you can ignore it.
-#As you dont need to worry about it in BTECH. 
+#Only really works in Linux and FreeBSD. This software is compiled to run on Linux and Windows. Windows cant have the buttons customized.
 st = Style()
 st.configure('W.TButton', background='purple', foreground='black', font=('Ubuntu', 22,"bold" ))
 #Buttons
@@ -343,6 +340,9 @@ update_record.pack(padx=10,pady=5, side=LEFT)
 results_database = Button(root,text="Results", style="W.TButton",command=results_database)
 results_database.pack(padx=10, pady=5, side=LEFT)
 query_database()
+#When you press on the X buttion then the GUI window will show up a popup.
+#Yes = Exit the software.
+#No = Stay in the software. 
 def on_closing():
     root = tk.Toplevel()  
     root.resizable(0,0)
